@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,16 +17,30 @@
     background: #fff; color: #000; cursor: pointer; font-weight: bold;
   }
   button:hover { background: #ddd; }
+  #error {
+    display: none; width: 100%; height: 100%; position: absolute;
+    flex-direction: column; justify-content: center; align-items: center;
+    color: #fff; font-size: 48px; text-align: center;
+  }
+  #error-text { margin-top: 40px; font-size: 24px; }
+  #credit { position: absolute; bottom: 20px; width: 100%; text-align: center; color: #fff; font-size: 18px; }
 </style>
 </head>
 <body>
 <div id="buttons">
-  <button id="start">Iniciar Grande Theft Auto V</button>
+  <button id="start">Start Grand Theft Auto V</button>
   <button id="fullscreen">Full Screen</button>
 </div>
 <video id="loading" src="loading.mp4" playsinline></video>
 <img id="menu" src="menu.png">
 <video id="loading2" src="loading2.mp4" playsinline></video>
+<video id="gameplay" src="gameplay.mp4" playsinline></video>
+<video id="gameplay2" src="gameplay2.mp4" playsinline></video>
+<div id="error">
+  <div>:-(</div>
+  <div id="error-text">Game is not ready yet</div>
+  <div id="credit">Made by BrochachoMC</div>
+</div>
 
 <script>
   const btn = document.getElementById("start");
@@ -35,6 +49,9 @@
   const loading = document.getElementById("loading");
   const menu = document.getElementById("menu");
   const loading2 = document.getElementById("loading2");
+  const gameplay = document.getElementById("gameplay");
+  const gameplay2 = document.getElementById("gameplay2");
+  const errorScreen = document.getElementById("error");
   let stage = 0;
 
   btn.onclick = async () => {
@@ -55,6 +72,24 @@
     stage = 2;
   };
 
+  loading2.onended = () => {
+    loading2.style.display = "none";
+    gameplay.style.display = "block";
+    stage = 4;
+    try { gameplay.play(); } catch (e) {}
+  };
+
+  gameplay.onended = () => {
+    gameplay.style.display = "none";
+    gameplay2.style.display = "block";
+    try { gameplay2.play(); } catch (e) {}
+  };
+
+  gameplay2.onended = () => {
+    gameplay2.style.display = "none";
+    errorScreen.style.display = "flex";
+  };
+
   document.addEventListener('keydown', (e) => {
     if (stage === 1) {
       e.preventDefault();
@@ -70,8 +105,13 @@
       loading.style.display = "none";
       menu.style.display = "none";
       loading2.style.display = "none";
+      gameplay.style.display = "none";
+      gameplay2.style.display = "none";
+      errorScreen.style.display = "none";
       loading.currentTime = 0;
       loading2.currentTime = 0;
+      gameplay.currentTime = 0;
+      gameplay2.currentTime = 0;
       stage = 0;
     }
   });
