@@ -34,8 +34,8 @@
 <video id="loading" src="loading.mp4" playsinline></video>
 <img id="menu" src="menu.png">
 <video id="loading2" src="loading2.mp4" playsinline></video>
-<video id="gameplay" src="gameplay.mp4" playsinline></video>
-<video id="gameplay2" src="gameplay2.mp4" playsinline></video>
+<video id="gameplay" src="gameplay.mp4" autoplay playsinline></video>
+<video id="gameplay2" src="gameplay2.mp4" autoplay playsinline></video>
 <div id="error">
   <div>:-(</div>
   <div id="error-text">Game is not ready yet</div>
@@ -76,17 +76,11 @@
     loading2.style.display = "none";
     gameplay.style.display = "block";
     stage = 4;
-    setTimeout(() => {
-      gameplay.play().catch(e => console.error("Erro ao tocar gameplay:", e));
-    }, 100);
   };
 
   gameplay.onended = () => {
     gameplay.style.display = "none";
     gameplay2.style.display = "block";
-    setTimeout(() => {
-      gameplay2.play().catch(e => console.error("Erro ao tocar gameplay2:", e));
-    }, 100);
   };
 
   gameplay2.onended = () => {
@@ -134,9 +128,7 @@
     menu.style.display = "none";
     loading2.style.display = "block";
     stage = 3;
-    setTimeout(() => {
-      loading2.play().catch(e => console.error("Erro ao tocar loading2:", e));
-    }, 100);
+    try { await loading2.play(); } catch (e) {}
   }
 </script>
 </body>
