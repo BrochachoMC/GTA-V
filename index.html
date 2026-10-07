@@ -76,13 +76,17 @@
     loading2.style.display = "none";
     gameplay.style.display = "block";
     stage = 4;
-    try { gameplay.play(); } catch (e) {}
+    setTimeout(() => {
+      gameplay.play().catch(e => console.error("Erro ao tocar gameplay:", e));
+    }, 100);
   };
 
   gameplay.onended = () => {
     gameplay.style.display = "none";
     gameplay2.style.display = "block";
-    try { gameplay2.play(); } catch (e) {}
+    setTimeout(() => {
+      gameplay2.play().catch(e => console.error("Erro ao tocar gameplay2:", e));
+    }, 100);
   };
 
   gameplay2.onended = () => {
@@ -130,7 +134,9 @@
     menu.style.display = "none";
     loading2.style.display = "block";
     stage = 3;
-    try { await loading2.play(); } catch (e) {}
+    setTimeout(() => {
+      loading2.play().catch(e => console.error("Erro ao tocar loading2:", e));
+    }, 100);
   }
 </script>
 </body>
