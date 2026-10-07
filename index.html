@@ -34,8 +34,8 @@
 <video id="loading" src="loading.mp4" playsinline></video>
 <img id="menu" src="menu.png">
 <video id="loading2" src="loading2.mp4" playsinline></video>
-<video id="gameplay" src="gameplay.mp4" autoplay playsinline></video>
-<video id="gameplay2" src="gameplay2.mp4" autoplay playsinline></video>
+<video id="gameplay" src="gameplay.mp4" playsinline></video>
+<video id="gameplay2" src="gameplay2.mp4" playsinline></video>
 <div id="error">
   <div>:-(</div>
   <div id="error-text">Game is not ready yet</div>
@@ -52,14 +52,12 @@
   const gameplay = document.getElementById("gameplay");
   const gameplay2 = document.getElementById("gameplay2");
   const errorScreen = document.getElementById("error");
-  let stage = 0;
 
   btn.onclick = async () => {
     buttons.style.display = "none";
     loading.style.display = "block";
-    stage = 1;
     try { await document.documentElement.requestFullscreen(); } catch (e) {}
-    try { await loading.play(); } catch (e) {}
+    loading.play();
   };
 
   fsBtn.onclick = async () => {
@@ -69,33 +67,21 @@
   loading.onended = () => {
     loading.style.display = "none";
     menu.style.display = "block";
-    stage = 2;
   };
 
-  loading2.onended = () => {
-    loading2.style.display = "none";
-    gameplay.style.display = "block";
-    stage = 4;
-  };
-
-  gameplay.onended = () => {
-    gameplay.style.display = "none";
-    gameplay2.style.display = "block";
-  };
-
-  gameplay2.onended = () => {
-    gameplay2.style.display = "none";
-    errorScreen.style.display = "flex";
+  menu.onclick = () => {
+    menu.style.display = "none";
+    loading2.style.display = "block";
+    loading2.play();
   };
 
   document.addEventListener('keydown', (e) => {
-    if (stage === 1) {
-      e.preventDefault();
-    }
-    if (stage === 2 && e.key === 'Enter') {
-      playClickAndLoadingVideo();
-    } else if (stage === 2) {
-      e.preventDefault();
+    if (e.key === 'Enter' && menu.style.display === 'block') {
+      menu.style.display = "none";
+      loading2.style.display = "block";
+      const click = new Audio('click.mp3');
+      click.play();
+      loading2.play();
     }
     if (e.key === 'Escape' && document.fullscreenElement) {
       document.exitFullscreen();
@@ -110,26 +96,25 @@
       loading2.currentTime = 0;
       gameplay.currentTime = 0;
       gameplay2.currentTime = 0;
-      stage = 0;
     }
   });
 
-  document.addEventListener('click', (e) => {
-    if (stage === 2) {
-      playClickAndLoadingVideo();
-    } else if (stage === 1) {
-      e.preventDefault();
-    }
-  });
+  loading2.onended = () => {
+    loading2.style.display = "none";
+    gameplay.style.display = "block";
+    gameplay.play();
+  };
 
-  async function playClickAndLoadingVideo() {
-    const click = new Audio('click.mp3');
-    click.play();
-    menu.style.display = "none";
-    loading2.style.display = "block";
-    stage = 3;
-    try { await loading2.play(); } catch (e) {}
-  }
+  gameplay.onended = () => {
+    gameplay.style.display = "none";
+    gameplay2.style.display = "block";
+    gameplay2.play();
+  };
+
+  gameplay2.onended = () => {
+    gameplay2.style.display = "none";
+    errorScreen.style.display = "flex";
+  };
 </script>
 </body>
 </html>
