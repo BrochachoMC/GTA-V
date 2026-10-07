@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GTA V</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
+  video { width: 100%; height: 100%; object-fit: contain; display: none; }
+  img { width: 100%; height: 100%; object-fit: contain; display: none; }
+  #buttons {
+    position: absolute; inset: 0; margin: auto; width: 480px; height: 60px;
+    display: flex; gap: 20px; justify-content: center;
+  }
+  button {
+    width: 220px; height: 60px; font-size: 16px; border: 0; border-radius: 8px;
+    background: #fff; color: #000; cursor: pointer; font-weight: bold;
+  }
+  button:hover { background: #ddd; }
+</style>
+</head>
+<body>
+<div id="buttons">
+  <button id="start">Iniciar Grande Theft Auto V</button>
+  <button id="fullscreen">Full Screen</button>
+</div>
+<video id="loading" src="loading.mp4" playsinline></video>
+<img id="menu" src="menu.png">
+<video id="loading2" src="loading2.mp4" playsinline></video>
+
+<script>
+  const btn = document.getElementById("start");
+  const fsBtn = document.getElementById("fullscreen");
+  const buttons = document.getElementById("buttons");
+  const loading = document.getElementById("loading");
+  const menu = document.getElementById("menu");
+  const loading2 = document.getElementById("loading2");
+  let stage = 0;
+
+  btn.onclick = async () => {
+    buttons.style.display = "none";
+    loading.style.display = "block";
+    stage = 1;
+    try { await document.documentElement.requestFullscreen(); } catch (e) {}
+    try { await loading.play(); } catch (e) {}
+  };
+
+  fsBtn.onclick = async () => {
+    try { await document.documentElement.requestFullscreen(); } catch (e) {}
+  };
+
+  loading.onended = () => {
+    loading.style.display = "none";
+    menu.style.display = "block";
+    stage = 2;
+  };
+
+  document.addEventListener('keydown', (e) => {
+    if (stage === 1) {
+      e.preventDefault();
+    }
+    if (stage === 2 && e.key === 'Enter') {
+      playClickAndLoadingVideo();
+    } else if (stage === 2) {
+      e.preventDefault();
+    }
+    if (e.key === 'Escape' && document.fullscreenElement) {
+      document.exitFullscreen();
+      buttons.style.display = "flex";
+      loading.style.display = "none";
+      menu.style.display = "none";
+      loading2.style.display = "none";
+      loading.currentTime = 0;
+      loading2.currentTime = 0;
+      stage = 0;
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (stage === 2) {
+      playClickAndLoadingVideo();
+    } else if (stage === 1) {
+      e.preventDefault();
+    }
+  });
+
+  async function playClickAndLoadingVideo() {
+    const click = new Audio('click.mp3');
+    click.play();
+    menu.style.display = "none";
+    loading2.style.display = "block";
+    stage = 3;
+    try { await loading2.play(); } catch (e) {}
+  }
+</script>
+</body>
+</html>
