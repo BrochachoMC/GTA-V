@@ -6,4 +6,4 @@
 
 ## 👤 Autor
 
-* Criado por **[BrochachoMC]**
+* Criado por **[BrochachoMC](https://github.com/BrochachoMC/)**
